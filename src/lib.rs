@@ -16,7 +16,7 @@ fn read_from_xyz(path: &str) -> Result<Molecule, Error> {
             let _ = file.read_to_string(&mut s);
             Ok(Molecule::from(s))
         }
-        Err(why) => Err(why)
+        Err(why) => Err(why),
     }
 }
 
@@ -24,12 +24,10 @@ fn write_to_xyz(path: &str, mol: &Molecule) -> Result<(), Error> {
     let p = Path::new(path);
     match File::create(p) {
         Err(why) => Err(why),
-        Ok(mut file ) => {
-            match file.write_all(mol.to_string().as_bytes()) {
-                Ok(_) => Ok(()),
-                Err(why) => Err(why),
-            }
-        }
+        Ok(mut file) => match file.write_all(mol.to_string().as_bytes()) {
+            Ok(_) => Ok(()),
+            Err(why) => Err(why),
+        },
     }
 }
 

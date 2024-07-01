@@ -26,7 +26,11 @@ impl From<String> for Atom {
 
 impl Display for Atom {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "  {0}    {1:.2}    {2:.2}    {3:.2}", self.element, self.x, self.y, self.z)
+        write!(
+            f,
+            "  {0}    {1:.2}    {2:.2}    {3:.2}",
+            self.element, self.x, self.y, self.z
+        )
     }
 }
 
@@ -77,7 +81,15 @@ mod tests {
 
     #[test]
     fn test_atom_to_string() {
-        let atom = Atom{element: String::from("S"), x: 6.32, y:-0.55, z: 1.0};
-        assert_eq!(atom.to_string(), String::from("  S    6.32    -0.55    1.00"))
+        let atom = Atom {
+            element: String::from("S"),
+            x: 6.32,
+            y: -0.55,
+            z: 1.0,
+        };
+        assert_eq!(
+            atom.to_string(),
+            String::from("  S    6.32    -0.55    1.00")
+        )
     }
 }

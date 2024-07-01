@@ -124,17 +124,20 @@ mod tests {
                     element: "N".to_string(),
                     x: 1.0,
                     y: 4.5,
-                    z: -3.5
+                    z: -3.5,
                 },
                 Atom {
                     element: "N".to_string(),
                     x: 2.0,
                     y: -0.5,
-                    z: 2.5
-                }
+                    z: 2.5,
+                },
             ],
             connectivity: Vec::new(),
         };
-        assert_eq!(mol.to_string(), String::from("2\n\n  N    1.00    4.50    -3.50\n  N    2.00    -0.50    2.50\n"))
+        assert_eq!(
+            mol.to_string(),
+            String::from("2\n\n  N    1.00    4.50    -3.50\n  N    2.00    -0.50    2.50\n")
+        )
     }
 }
