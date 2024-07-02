@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct Atom {
     pub(crate) element: String,
@@ -19,6 +21,16 @@ impl From<String> for Atom {
             y: xyz[1],
             z: xyz[2],
         }
+    }
+}
+
+impl Display for Atom {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "  {0}    {1:.2}    {2:.2}    {3:.2}",
+            self.element, self.x, self.y, self.z
+        )
     }
 }
 
@@ -64,6 +76,20 @@ mod tests {
                 y: 4.5,
                 z: -3.5
             }
+        )
+    }
+
+    #[test]
+    fn test_atom_to_string() {
+        let atom = Atom {
+            element: String::from("S"),
+            x: 6.32,
+            y: -0.55,
+            z: 1.0,
+        };
+        assert_eq!(
+            atom.to_string(),
+            String::from("  S    6.32    -0.55    1.00")
         )
     }
 }

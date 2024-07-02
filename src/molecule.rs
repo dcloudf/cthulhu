@@ -1,7 +1,7 @@
 use crate::atom::Atom;
 use itertools::Itertools;
 use lazy_static::lazy_static;
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Display};
 
 const RADII_TOLERANCE: f32 = 0.4;
 
@@ -41,6 +41,16 @@ impl From<String> for Molecule {
                 .collect::<Vec<Atom>>(),
             connectivity: Vec::new(),
         }
+    }
+}
+
+impl Display for Molecule {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let mut s = format!("{}\n\n", self.atoms.len());
+        for atom in self.atoms.iter() {
+            s.push_str(format!("{}\n", atom).as_str())
+        }
+        write!(f, "{}", s)
     }
 }
 
@@ -103,6 +113,31 @@ mod tests {
         assert_eq!(
             m.connectivity,
             vec![(0, 1), (1, 2), (1, 4), (2, 3), (3, 5), (3, 6), (3, 7)]
+        )
+    }
+
+    #[test]
+    fn test_molecule_to_string() {
+        let mol = Molecule {
+            atoms: vec![
+                Atom {
+                    element: "N".to_string(),
+                    x: 1.0,
+                    y: 4.5,
+                    z: -3.5,
+                },
+                Atom {
+                    element: "N".to_string(),
+                    x: 2.0,
+                    y: -0.5,
+                    z: 2.5,
+                },
+            ],
+            connectivity: Vec::new(),
+        };
+        assert_eq!(
+            mol.to_string(),
+            String::from("2\n\n  N    1.00    4.50    -3.50\n  N    2.00    -0.50    2.50\n")
         )
     }
 }
