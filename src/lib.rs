@@ -8,9 +8,8 @@ use std::path::Path;
 
 use molecule::Molecule;
 
-fn read_from_xyz(path: &str) -> Result<Molecule, Error> {
-    let p = Path::new(path);
-    match File::open(p) {
+fn read_from_xyz(path: &Path) -> Result<Molecule, Error> {
+    match File::open(path) {
         Ok(mut file) => {
             let mut s = String::new();
             let _ = file.read_to_string(&mut s);
@@ -20,9 +19,8 @@ fn read_from_xyz(path: &str) -> Result<Molecule, Error> {
     }
 }
 
-fn write_to_xyz(path: &str, mol: &Molecule) -> Result<(), Error> {
-    let p = Path::new(path);
-    match File::create(p) {
+fn write_to_xyz(path: &Path, mol: &Molecule) -> Result<(), Error> {
+    match File::create(path) {
         Err(why) => Err(why),
         Ok(mut file) => match file.write_all(mol.to_string().as_bytes()) {
             Ok(_) => Ok(()),
@@ -38,9 +36,10 @@ mod tests {
 
     #[test]
     fn test_write_and_read_molecule() {
+        let p = Path::new("mol.xyz");
         let m = Molecule::from("2\n\n  N  1.0  4.5  -3.5  \n  N  2.0  -0.5  2.5  ".to_string());
-        let _ = write_to_xyz("mol.xyz", &m);
-        assert_eq!(read_from_xyz("mol.xyz").unwrap(), m);
-        let _ = remove_file(Path::new("mol.xyz"));
+        let _ = write_to_xyz(p, &m);
+        assert_eq!(read_from_xyz(p).unwrap(), m);
+        let _ = remove_file(p);
     }
 }
