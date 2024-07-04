@@ -1,4 +1,3 @@
-#[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 pub(crate) struct Bond {
     pub(crate) indices: (usize, usize),
