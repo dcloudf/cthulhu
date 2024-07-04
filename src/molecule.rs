@@ -1,27 +1,43 @@
-use std::{error::Error, fmt::Display};
-
 use crate::{atom::Atom, bond::Bond, element::Element};
-
-#[derive(Debug)]
-pub struct GraphError {}
-
-impl Display for GraphError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Graph-based error is happened")
-    }
-}
-
-impl Error for GraphError {}
-
-pub trait BaseMolecule {
-    fn element(&self, id: &usize) -> Result<Element, GraphError>;
-
-    fn hydrogens(&self, id: &usize) -> Result<u8, GraphError>;
-
-    fn charge(&self, id: &usize) -> Result<i8, GraphError>;
-}
+use crate::base::{graph::BaseGraph, molecule::{BaseMolecule, GraphError}};
 
 pub struct Molecule {
     atoms: Vec<Atom>,
     bonds: Vec<Bond>,
+}
+
+impl BaseGraph<Atom, Bond> for Molecule {
+    fn is_empty(&self) -> bool {
+        todo!()
+    }
+
+    fn len(&self) -> usize {
+        todo!()
+    }
+
+    fn nodes(&self) -> Vec<Atom> {
+        todo!()
+    }
+
+    fn edges(&self) -> Vec<Bond> {
+        todo!()
+    }
+
+    fn neighbours(&self, node_id: &usize) -> Vec<Atom> {
+        todo!()
+    }
+}
+
+impl BaseMolecule<Element> for Molecule {
+    fn charge(&self, id: &usize) -> Result<i8, GraphError> {
+        todo!()
+    }
+
+    fn element(&self, id: &usize) -> Result<Element, GraphError> {
+        todo!()
+    }
+
+    fn hydrogens(&self, id: &usize) -> Result<u8, GraphError> {
+        todo!()
+    }
 }
