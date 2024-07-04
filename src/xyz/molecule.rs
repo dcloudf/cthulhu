@@ -54,6 +54,7 @@ impl Display for Molecule {
     }
 }
 
+#[allow(dead_code)]
 impl Molecule {
     fn calculate_atomic_connectivity(&mut self) {
         self.connectivity = self

@@ -34,6 +34,7 @@ impl Display for Atom {
     }
 }
 
+#[allow(dead_code)]
 impl Atom {
     pub(crate) fn calculate_pairwise_distance(self, other_atom: &Atom) -> f32 {
         ((self.x - other_atom.x).powi(2)

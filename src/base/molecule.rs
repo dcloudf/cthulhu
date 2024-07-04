@@ -11,6 +11,7 @@ impl Display for GraphError {
 
 impl Error for GraphError {}
 
+#[allow(dead_code)]
 pub trait BaseMolecule<E> {
     fn element(&self, id: &usize) -> Result<E, GraphError>;
 

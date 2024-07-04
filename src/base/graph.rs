@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub trait BaseGraph<N, E> {
     fn is_empty(&self) -> bool;
     fn len(&self) -> usize;

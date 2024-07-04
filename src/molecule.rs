@@ -1,6 +1,10 @@
+use crate::base::{
+    graph::BaseGraph,
+    molecule::{BaseMolecule, GraphError},
+};
 use crate::{atom::Atom, bond::Bond, element::Element};
-use crate::base::{graph::BaseGraph, molecule::{BaseMolecule, GraphError}};
 
+#[allow(dead_code)]
 pub struct Molecule {
     atoms: Vec<Atom>,
     bonds: Vec<Bond>,
@@ -23,21 +27,21 @@ impl BaseGraph<Atom, Bond> for Molecule {
         todo!()
     }
 
-    fn neighbours(&self, node_id: &usize) -> Vec<Atom> {
+    fn neighbours(&self, _node_id: &usize) -> Vec<Atom> {
         todo!()
     }
 }
 
 impl BaseMolecule<Element> for Molecule {
-    fn charge(&self, id: &usize) -> Result<i8, GraphError> {
+    fn charge(&self, _id: &usize) -> Result<i8, GraphError> {
         todo!()
     }
 
-    fn element(&self, id: &usize) -> Result<Element, GraphError> {
+    fn element(&self, _id: &usize) -> Result<Element, GraphError> {
         todo!()
     }
 
-    fn hydrogens(&self, id: &usize) -> Result<u8, GraphError> {
+    fn hydrogens(&self, _id: &usize) -> Result<u8, GraphError> {
         todo!()
     }
 }
