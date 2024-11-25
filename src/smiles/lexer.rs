@@ -12,11 +12,14 @@ enum Token {
     BracketAtom(String),
     OpenBranch,
     CloseBranch,
+    Bond(char),
+    RingBond(u8),
 }
 
 #[derive(Debug)]
 pub enum LexerError {
     UnknownSymbol(char),
+    IncorrectBondRingCharacter(String),
 }
 
 impl Lexer {
@@ -58,6 +61,26 @@ impl Lexer {
                 self.current_index += result.len();
                 Token::BracketAtom(result)
             }
+            b @ ('-' | '=' | '#' | '$' | ':' | '/' | '\\') => Token::Bond(b),
+            b if b.is_numeric() => match b.to_string().parse() {
+                Ok(value) => Token::Bond(value),
+                Err(_) => return Err(LexerError::IncorrectBondRingCharacter(b.to_string())),
+            },
+            '%' => {
+                let value = self
+                    .input
+                    .chars()
+                    .skip(self.current_index + 1)
+                    .take(2)
+                    .collect::<String>();
+                match value.parse::<u8>() {
+                    Ok(value) => {
+                        self.current_index += 2;
+                        Token::RingBond(value)
+                    }
+                    Err(_) => return Err(LexerError::IncorrectBondRingCharacter(value)),
+                }
+            }
             c => return Err(LexerError::UnknownSymbol(c)),
         };
         self.current_index += 1;
@@ -78,7 +101,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_lexer_tokenize() {
+    fn test_lexer_tokenize_simple_with_branching() {
         let input = "N([C])C(C)O".to_string();
         let mut lexer = Lexer::new(input);
         assert_eq!(
@@ -95,5 +118,32 @@ mod tests {
                 Token::Atom('O'.to_string()),
             ]
         );
+    }
+
+    #[test]
+    fn test_lexer_tokenize_bonds_and_rings() {
+        let input = "C%11CC(=C)CCC%11-C#C".to_string();
+        let mut lexer = Lexer::new(input);
+        assert_eq!(
+            lexer.tokenize(),
+            vec![
+                Token::Atom('C'.to_string()),
+                Token::RingBond(11),
+                Token::Atom('C'.to_string()),
+                Token::Atom('C'.to_string()),
+                Token::OpenBranch,
+                Token::Bond('='),
+                Token::Atom('C'.to_string()),
+                Token::CloseBranch,
+                Token::Atom('C'.to_string()),
+                Token::Atom('C'.to_string()),
+                Token::Atom('C'.to_string()),
+                Token::RingBond(11),
+                Token::Bond('-'),
+                Token::Atom('C'.to_string()),
+                Token::Bond('#'),
+                Token::Atom('C'.to_string()),
+            ]
+        )
     }
 }
