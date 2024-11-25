@@ -14,6 +14,7 @@ enum Token {
     CloseBranch,
     Bond(char),
     RingBond(u8),
+    Dot,
 }
 
 #[derive(Debug)]
@@ -63,7 +64,7 @@ impl Lexer {
             }
             b @ ('-' | '=' | '#' | '$' | ':' | '/' | '\\') => Token::Bond(b),
             b if b.is_numeric() => match b.to_string().parse() {
-                Ok(value) => Token::Bond(value),
+                Ok(value) => Token::RingBond(value),
                 Err(_) => return Err(LexerError::IncorrectBondRingCharacter(b.to_string())),
             },
             '%' => {
@@ -81,6 +82,7 @@ impl Lexer {
                     Err(_) => return Err(LexerError::IncorrectBondRingCharacter(value)),
                 }
             }
+            '.' => Token::Dot,
             c => return Err(LexerError::UnknownSymbol(c)),
         };
         self.current_index += 1;
@@ -143,6 +145,22 @@ mod tests {
                 Token::Atom('C'.to_string()),
                 Token::Bond('#'),
                 Token::Atom('C'.to_string()),
+            ]
+        )
+    }
+
+    #[test]
+    fn test_lexer_tokenize_dot_with_closures() {
+        let input = "C1.C1".to_string();
+        let mut lexer = Lexer::new(input);
+        assert_eq!(
+            lexer.tokenize(),
+            vec![
+                Token::Atom('C'.to_string()),
+                Token::RingBond(1),
+                Token::Dot,
+                Token::Atom('C'.to_string()),
+                Token::RingBond(1),
             ]
         )
     }
